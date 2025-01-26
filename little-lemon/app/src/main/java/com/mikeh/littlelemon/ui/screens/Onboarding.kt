@@ -126,6 +126,6 @@ fun Onboarding() {
 
 @Composable
 @Preview
-fun OnboardingPreview() {
+private fun OnboardingPreview() {
     Onboarding()
 }
