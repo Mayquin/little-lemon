@@ -18,9 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.mikeh.littlelemon.ui.components.BaseButton
 import com.mikeh.littlelemon.ui.components.BaseTextField
 import com.mikeh.littlelemon.ui.components.CustomTopAppBar
+import com.mikeh.littlelemon.ui.screens.navigation.NavigationItem
 import com.mikeh.littlelemon.ui.theme.HighlightWhite
 import com.mikeh.littlelemon.ui.theme.PrimaryGreen
 
@@ -30,7 +33,7 @@ import com.mikeh.littlelemon.ui.theme.PrimaryGreen
  */
 
 @Composable
-fun Onboarding() {
+fun Onboarding(navController: NavHostController) {
     Scaffold(topBar = { CustomTopAppBar() }) { paddingValues ->
         val name = remember {
             mutableStateOf("")
@@ -86,7 +89,13 @@ fun Onboarding() {
                     }
                 )
                 BaseButton(btnTitle = "Register") {
-                    
+                    if (name.value.isEmpty() ||
+                        surname.value.isEmpty() ||
+                        email.value.isEmpty()) {
+                        return@BaseButton
+                    }
+
+                    navController.navigate(NavigationItem.Home.route)
                 }
             }
         }
@@ -97,5 +106,5 @@ fun Onboarding() {
 @Composable
 @Preview
 private fun OnboardingPreview() {
-    Onboarding()
+    Onboarding(rememberNavController())
 }
