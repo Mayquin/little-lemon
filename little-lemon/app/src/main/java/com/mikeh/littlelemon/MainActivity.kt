@@ -3,6 +3,7 @@ package com.mikeh.littlelemon
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import com.mikeh.littlelemon.api.model.AppDatabase
@@ -17,6 +18,8 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
@@ -34,13 +37,26 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LittleLemonTheme {
-                Navigation(navController = rememberNavController())
+                Navigation(
+                    navController = rememberNavController(),
+                    database
+                )
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        lifecycleScope.launch(Dispatchers.IO) {
+            if (database.menuItemDao().isEmpty()) {
+                saveMenuToDatabase(fetchMenu())
             }
         }
     }
 
     private suspend fun fetchMenu(): List<MenuItemNetwork> {
-        val menuContentUrl = "https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/menu.json"
+        val menuContentUrl =
+            "https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/menu.json"
         return httpClient
             .get(urlString = menuContentUrl)
             .body<MenuNetworkData>()

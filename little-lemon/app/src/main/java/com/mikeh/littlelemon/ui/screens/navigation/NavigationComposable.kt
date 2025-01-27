@@ -16,6 +16,7 @@ import com.mikeh.littlelemon.ui.screens.Profile
 
 @Composable
 fun Navigation(navController: NavHostController) {
+fun Navigation(navController: NavHostController, database: AppDatabase) {
     NavHost(navController = navController, startDestination = NavigationItem.Onboarding.route) {
         composable(route = NavigationItem.Onboarding.route) {
             Onboarding()
