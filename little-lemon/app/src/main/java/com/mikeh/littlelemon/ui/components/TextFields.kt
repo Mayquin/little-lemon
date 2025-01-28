@@ -31,7 +31,10 @@ import androidx.compose.ui.unit.sp
  */
 
 @Composable
-fun BaseTextField(title: String = "", value: String, onValueChange: (String) -> Unit) {
+fun BaseTextField(title: String = "",
+                  value: String,
+                  leadingIcon: @Composable (() -> Unit)? = null,
+                  onValueChange: (String) -> Unit) {
     Column {
         if (title.isNotEmpty()){
             Text(text = title)
@@ -39,6 +42,7 @@ fun BaseTextField(title: String = "", value: String, onValueChange: (String) -> 
         CustomizedTextField(modifier = Modifier.height(40.dp)
             .fillMaxWidth(),
             value = value,
+            leadingIcon = leadingIcon,
             onValueChange = onValueChange)
     }
 }
@@ -119,5 +123,5 @@ private fun CustomizedTextField(
 @Composable
 @Preview
 fun TextFieldsPreview() {
-    BaseTextField("Test", "Test", { })
+    BaseTextField("Test", "Test", onValueChange = { })
 }
