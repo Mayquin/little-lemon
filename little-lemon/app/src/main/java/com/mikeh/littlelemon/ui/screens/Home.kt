@@ -15,8 +15,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,9 +30,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.mikeh.littlelemon.R
 import com.mikeh.littlelemon.api.model.MenuItemRoom
 import com.mikeh.littlelemon.ui.components.BaseTextField
@@ -46,8 +51,10 @@ import com.mikeh.littlelemon.ui.theme.PrimaryYellow
  */
 
 @Composable
-fun Home(menuItems: List<MenuItemRoom>,
-         categories: List<String>) {
+fun Home(
+    menuItems: List<MenuItemRoom>,
+    categories: List<String>
+) {
     val stateMenuItems = remember {
         mutableStateOf(menuItems)
     }
@@ -61,8 +68,18 @@ fun Home(menuItems: List<MenuItemRoom>,
                     .background(PrimaryGreen)
                     .padding(20.dp)
             ) {
-                Text(text = "Little Lemon", color = PrimaryYellow)
-                Text(text = "Chicago", color = HighlightWhite)
+                Text(
+                    text = "Little Lemon",
+                    color = PrimaryYellow,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Chicago",
+                    color = HighlightWhite,
+                    fontSize = 18.sp
+                )
+                Spacer(modifier = Modifier.height(20.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -71,7 +88,8 @@ fun Home(menuItems: List<MenuItemRoom>,
                     Text(
                         modifier = Modifier.fillMaxWidth(0.65f),
                         text = "We are a family-owned Mediterranean restaurant, focused on traditional recipes served with a modern twist",
-                        color = HighlightWhite
+                        color = HighlightWhite,
+                        fontSize = 14.sp
                     )
                     Image(
                         modifier = Modifier
@@ -82,10 +100,19 @@ fun Home(menuItems: List<MenuItemRoom>,
                         contentDescription = ""
                     )
                 }
-                Spacer(modifier = Modifier.height(10.dp))
-                BaseTextField(value = "Enter search phrase", onValueChange = {
+                Spacer(modifier = Modifier.height(20.dp))
+                BaseTextField(
+                    value = "Enter search phrase",
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = ""
+                        )
+                    },
+                    onValueChange = {
 
-                })
+                    }
+                )
             }
 
             Column {
@@ -93,9 +120,10 @@ fun Home(menuItems: List<MenuItemRoom>,
                 LazyRow(horizontalArrangement = Arrangement.SpaceBetween) {
                     items(categories) { category ->
                         Button(onClick = {
-                            stateMenuItems.value = menuItems.filter { it.category == category.lowercase() }
+                            stateMenuItems.value =
+                                menuItems.filter { it.category == category.lowercase() }
                         }) {
-                            Text(text = category.replaceFirstChar {  it.uppercase() })
+                            Text(text = category.replaceFirstChar { it.uppercase() })
                         }
                     }
                 }
@@ -107,7 +135,7 @@ fun Home(menuItems: List<MenuItemRoom>,
                     .fillMaxHeight()
                     .padding(20.dp)
             ) {
-                items (
+                items(
                     items = stateMenuItems.value,
                     itemContent = { menuItem ->
                         Column {
@@ -116,9 +144,11 @@ fun Home(menuItems: List<MenuItemRoom>,
                                 modifier = Modifier.fillMaxWidth(),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                Column (modifier = Modifier
-                                    .fillMaxWidth(0.8f)
-                                    .height(70.dp)) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.8f)
+                                        .height(70.dp)
+                                ) {
                                     Text(menuItem.description, maxLines = 2)
                                     Text(
                                         modifier = Modifier
@@ -129,18 +159,22 @@ fun Home(menuItems: List<MenuItemRoom>,
                                     )
                                 }
 
-                                Image( modifier = Modifier
-                                    .size(80.dp, 70.dp)
-                                    .clip(
-                                        RoundedCornerShape(10.dp)
-                                    ),
+                                Image(
+                                    modifier = Modifier
+                                        .size(80.dp, 70.dp)
+                                        .clip(
+                                            RoundedCornerShape(10.dp)
+                                        ),
                                     painter = painterResource(id = R.drawable.bruschetta),
                                     contentScale = ContentScale.FillBounds,
-                                    contentDescription = "")
+                                    contentDescription = ""
+                                )
                             }
                         }
-                        Divider(thickness = 1.dp,
-                            color = HighlightBlack)
+                        Divider(
+                            thickness = 1.dp,
+                            color = HighlightBlack
+                        )
                     }
                 )
             }
@@ -151,19 +185,24 @@ fun Home(menuItems: List<MenuItemRoom>,
 @Composable
 @Preview
 private fun HomePreview() {
-    Home(listOf(
-        MenuItemRoom(0,
-            "Greek Salad",
-            "The famous greek salad of crispy lettuce, peppers, olives and our Chicag..",
-            12.99,
-            "",
-            "Dessert"
+    Home(
+        listOf(
+            MenuItemRoom(
+                0,
+                "Greek Salad",
+                "The famous greek salad of crispy lettuce, peppers, olives and our Chicag..",
+                12.99,
+                "",
+                "Dessert"
             ),
-        MenuItemRoom(0,
-            "Greek Salad",
-            "The famous greek salad of crispy lettuce, peppers, olives and our Chicag..",
-            12.99,
-            "",
-            "Dessert"
-        )), listOf("Dessert","Dessert"))
+            MenuItemRoom(
+                0,
+                "Greek Salad",
+                "The famous greek salad of crispy lettuce, peppers, olives and our Chicag..",
+                12.99,
+                "",
+                "Dessert"
+            )
+        ), listOf("Dessert", "Dessert")
+    )
 }
